@@ -1,4 +1,4 @@
-package metadatamcpserver
+package config
 
 import (
 	"fmt"
@@ -8,11 +8,12 @@ import (
 )
 
 type Config struct {
-	Port              int    `yaml:"port"`
-	TMDB_API_KEY      string `yaml:"tmdb_api_key"`
-	ThePornDB_API_KEY string `yaml:"theporndb_api_key"`
-	MetaTube_API_URL  string `yaml:"metatube_api_url"`
-	MetaTube_API_KEY  string `yaml:"metatube_api_key"`
+	Port                 int    `yaml:"port"`
+	TMDBAPIKey           string `yaml:"tmdb_api_key"`
+	TMDBResponseLanguage string `yaml:"tmdb_response_language"`
+	ThePornDBAPIKey      string `yaml:"theporndb_api_key"`
+	MetaTubeAPIURL       string `yaml:"metatube_api_url"`
+	MetaTubeAPIKEY       string `yaml:"metatube_api_key"`
 }
 
 func (c *Config) validate() error {
@@ -20,13 +21,19 @@ func (c *Config) validate() error {
 		// default port is 8080
 		c.Port = 8080
 	}
-	if c.TMDB_API_KEY == "" {
+
+	if c.TMDBAPIKey == "" {
 		return fmt.Errorf("TMDB_API_KEY is required")
 	}
-	if c.ThePornDB_API_KEY == "" {
+	if c.TMDBResponseLanguage == "" {
+		// default language is zh-CN
+		c.TMDBResponseLanguage = "zh-CN"
+	}
+
+	if c.ThePornDBAPIKey == "" {
 		return fmt.Errorf("ThePornDB_API_KEY is required")
 	}
-	if c.MetaTube_API_URL == "" {
+	if c.MetaTubeAPIURL == "" {
 		return fmt.Errorf("MetaTube_API_URL is required")
 	}
 	// MetaTube_API_KEY is optional

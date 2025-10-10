@@ -1,0 +1,6 @@
+port: 8081                                # port is optional, default is 8080
+tmdb_api_key: your_tmdb_api_key           # required
+tmdb_response_language: en-US             # optional, default is zh-CN
+theporndb_api_key: your_theporndb_api_key # required
+metatube_api_url: your_metatube_api_url   # required
+metatube_api_key: your_metatube_api_key   # optional, default is empty string
