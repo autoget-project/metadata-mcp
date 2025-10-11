@@ -30,6 +30,8 @@ func main() {
 	}, nil)
 
 	mcptools.NewTMDB(conf.TMDBAPIKey, conf.TMDBResponseLanguage).AddTools(server)
+	mcptools.NewThePornDB(conf.ThePornDBAPIToken).AddTools(server)
+	mcptools.NewMetatube(conf.MetaTubeAPIURL, conf.MetaTubeAPIKEY).AddTools(server)
 	// TODO: Add other MCP tools here (ThePornDB, Metatube, DuckDuckGo)
 
 	handler := mcp.NewStreamableHTTPHandler(func(req *http.Request) *mcp.Server {

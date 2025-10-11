@@ -8,17 +8,17 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func metadataURLFromEnv(t *testing.T) string {
+func metatubeURLFromEnv(t *testing.T) string {
 	t.Helper()
-	url := os.Getenv("METADATA_URL")
+	url := os.Getenv("METATUBE_URL")
 	if url == "" {
-		t.Skip("METADATA_URL environment variable not set")
+		t.Skip("METATUBE_URL environment variable not set")
 	}
 	return url
 }
 
 func TestSearchJAV(t *testing.T) {
-	url := metadataURLFromEnv(t)
+	url := metatubeURLFromEnv(t)
 	metatube := NewMetatube(url, "")
 	result, err := metatube.searchJAV(SearchJAVInput{JAVID: "SSIS-698"})
 	require.NoError(t, err)

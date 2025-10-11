@@ -11,7 +11,7 @@ type Config struct {
 	Port                 int    `yaml:"port"`
 	TMDBAPIKey           string `yaml:"tmdb_api_key"`
 	TMDBResponseLanguage string `yaml:"tmdb_response_language"`
-	ThePornDBAPIKey      string `yaml:"theporndb_api_key"`
+	ThePornDBAPIToken    string `yaml:"theporndb_api_token"`
 	MetaTubeAPIURL       string `yaml:"metatube_api_url"`
 	MetaTubeAPIKEY       string `yaml:"metatube_api_key"`
 }
@@ -30,7 +30,7 @@ func (c *Config) validate() error {
 		c.TMDBResponseLanguage = "zh-CN"
 	}
 
-	if c.ThePornDBAPIKey == "" {
+	if c.ThePornDBAPIToken == "" {
 		return fmt.Errorf("ThePornDB_API_KEY is required")
 	}
 	if c.MetaTubeAPIURL == "" {
