@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func apiKeyFromEnv(t *testing.T) string {
+func tmdbAPIKeyFromEnv(t *testing.T) string {
 	t.Helper()
 	key := os.Getenv("TMDB_API_KEY")
 	if key == "" {
@@ -18,8 +18,8 @@ func apiKeyFromEnv(t *testing.T) string {
 }
 
 func TestSearchMovies(t *testing.T) {
-	key := apiKeyFromEnv(t)
-	tmdb := NewTMDBClient(key, "en-US")
+	key := tmdbAPIKeyFromEnv(t)
+	tmdb := NewTMDB(key, "en-US")
 
 	tests := []struct {
 		name  string
@@ -50,8 +50,8 @@ func TestSearchMovies(t *testing.T) {
 }
 
 func TestSearchMoviesNotExists(t *testing.T) {
-	key := apiKeyFromEnv(t)
-	tmdb := NewTMDBClient(key, "en-US")
+	key := tmdbAPIKeyFromEnv(t)
+	tmdb := NewTMDB(key, "en-US")
 	// Year is wrong
 	result, err := tmdb.searchMovies(TMDBSearchMovieInput{Name: "The Matrix", Year: 1990})
 	require.NoError(t, err)
@@ -59,8 +59,8 @@ func TestSearchMoviesNotExists(t *testing.T) {
 }
 
 func TestSearchTVShows(t *testing.T) {
-	key := apiKeyFromEnv(t)
-	tmdb := NewTMDBClient(key, "en-US")
+	key := tmdbAPIKeyFromEnv(t)
+	tmdb := NewTMDB(key, "en-US")
 	result, err := tmdb.searchTVShows(TMDBSearchTVShowInput{Name: "Breaking Bad"})
 	require.NoError(t, err)
 	require.NotEmpty(t, result.Results)

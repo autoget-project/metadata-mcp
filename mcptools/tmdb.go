@@ -16,7 +16,7 @@ type TMDB struct {
 	language string
 }
 
-func NewTMDBClient(apiKey, language string) *TMDB {
+func NewTMDB(apiKey, language string) *TMDB {
 	return &TMDB{
 		apiKey:   apiKey,
 		language: language,
@@ -27,11 +27,11 @@ func (s *TMDB) AddTools(server *mcp.Server) {
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "search_movies",
 		Description: "Search for movies on TMDB by given name (required) and year (optional).",
-	}, s.SearchMovies)
+	}, s.searchMoviesTool)
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "search_tv_shows",
 		Description: "Search for tv shows on TMDB by given name.",
-	}, s.SearchTVShows)
+	}, s.searchTVShowsTool)
 }
 
 type TMDBSearchMovieInput struct {
@@ -112,7 +112,7 @@ func (s *TMDB) searchMovies(input TMDBSearchMovieInput) (SearchMovieOutput, erro
 	return SearchMovieOutput{Results: results}, nil
 }
 
-func (s *TMDB) SearchMovies(
+func (s *TMDB) searchMoviesTool(
 	ctx context.Context, req *mcp.CallToolRequest, input TMDBSearchMovieInput) (
 	*mcp.CallToolResult, SearchMovieOutput, error) {
 	result, err := s.searchMovies(input)
@@ -203,7 +203,7 @@ func (s *TMDB) searchTVShows(input TMDBSearchTVShowInput) (SearchTVShowOutput, e
 	return SearchTVShowOutput{Results: results}, nil
 }
 
-func (s *TMDB) SearchTVShows(
+func (s *TMDB) searchTVShowsTool(
 	ctx context.Context, req *mcp.CallToolRequest, input TMDBSearchTVShowInput) (
 	*mcp.CallToolResult, SearchTVShowOutput, error) {
 	result, err := s.searchTVShows(input)

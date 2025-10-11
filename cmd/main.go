@@ -29,7 +29,7 @@ func main() {
 		Name: "metadata-mcp-server",
 	}, nil)
 
-	mcptools.NewTMDBClient(conf.TMDBAPIKey, conf.TMDBResponseLanguage).AddTools(server)
+	mcptools.NewTMDB(conf.TMDBAPIKey, conf.TMDBResponseLanguage).AddTools(server)
 	// TODO: Add other MCP tools here (ThePornDB, Metatube, DuckDuckGo)
 
 	handler := mcp.NewStreamableHTTPHandler(func(req *http.Request) *mcp.Server {
