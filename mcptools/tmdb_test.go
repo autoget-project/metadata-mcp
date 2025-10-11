@@ -4,6 +4,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -22,17 +23,17 @@ func TestSearchMovies(t *testing.T) {
 
 	tests := []struct {
 		name  string
-		input SearchMovieInput
+		input TMDBSearchMovieInput
 	}{
 		{
 			name: "Search for The Matrix",
-			input: SearchMovieInput{
+			input: TMDBSearchMovieInput{
 				Name: "The Matrix",
 			},
 		},
 		{
 			name: "Search for The Matrix with year",
-			input: SearchMovieInput{
+			input: TMDBSearchMovieInput{
 				Name: "The Matrix",
 				Year: 2000,
 			},
@@ -51,7 +52,18 @@ func TestSearchMovies(t *testing.T) {
 func TestSearchMoviesNotExists(t *testing.T) {
 	key := apiKeyFromEnv(t)
 	tmdb := NewTMDBClient(key, "en-US")
-	result, err := tmdb.searchMovies(SearchMovieInput{Name: "The Matrix", Year: 1990})
+	// Year is wrong
+	result, err := tmdb.searchMovies(TMDBSearchMovieInput{Name: "The Matrix", Year: 1990})
 	require.NoError(t, err)
 	require.Empty(t, result.Results)
+}
+
+func TestSearchTVShows(t *testing.T) {
+	key := apiKeyFromEnv(t)
+	tmdb := NewTMDBClient(key, "en-US")
+	result, err := tmdb.searchTVShows(TMDBSearchTVShowInput{Name: "Breaking Bad"})
+	require.NoError(t, err)
+	require.NotEmpty(t, result.Results)
+	assert.Equal(t, "Breaking Bad", result.Results[0].Name)
+	assert.Len(t, result.Results[0].Seasons, 6)
 }

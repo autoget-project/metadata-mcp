@@ -28,11 +28,14 @@ func (s *TMDB) AddTools(server *mcp.Server) {
 		Name:        "search_movies",
 		Description: "Search for movies on TMDB by given name (required) and year (optional).",
 	}, s.SearchMovies)
-
+	mcp.AddTool(server, &mcp.Tool{
+		Name:        "search_tv_shows",
+		Description: "Search for tv shows on TMDB by given name.",
+	}, s.SearchTVShows)
 }
 
-type SearchMovieInput struct {
-	Name string `json:"name" jsonschema:"the name of the movie to search for"`
+type TMDBSearchMovieInput struct {
+	Name string `json:"name" jsonschema:"the name of the movie or tv show to search for"`
 	Year int    `json:"year,omitempty" jsonschema:"(optional) the year of the movie released"`
 }
 
@@ -54,7 +57,7 @@ type SearchMovieOutput struct {
 	Results []TMDBMovieItem `json:"results"`
 }
 
-func (s *TMDB) searchMovies(input SearchMovieInput) (SearchMovieOutput, error) {
+func (s *TMDB) searchMovies(input TMDBSearchMovieInput) (SearchMovieOutput, error) {
 	c, err := tmdb.Init(s.apiKey)
 	if err != nil {
 		log.Printf("Error initializing TMDB client: %v", err)
@@ -92,6 +95,9 @@ func (s *TMDB) searchMovies(input SearchMovieInput) (SearchMovieOutput, error) {
 				if len(actors) >= TMDB_LIMIT_ACTORS_COUNT {
 					break
 				}
+				if cast.KnownForDepartment != "Acting" {
+					continue
+				}
 				actors = append(actors, TMDBActor{
 					Name:         cast.Name,
 					OriginalName: cast.OriginalName,
@@ -107,8 +113,99 @@ func (s *TMDB) searchMovies(input SearchMovieInput) (SearchMovieOutput, error) {
 }
 
 func (s *TMDB) SearchMovies(
-	ctx context.Context, req *mcp.CallToolRequest, input SearchMovieInput) (
+	ctx context.Context, req *mcp.CallToolRequest, input TMDBSearchMovieInput) (
 	*mcp.CallToolResult, SearchMovieOutput, error) {
 	result, err := s.searchMovies(input)
+	return nil, result, err
+}
+
+type TMDBSearchTVShowInput struct {
+	Name string `json:"name" jsonschema:"the name of the movie or tv show to search for"`
+}
+
+type TMDBTVShowSeason struct {
+	Name         string `json:"name"`
+	SeasonNumber int    `json:"season_number"`
+	EpisodeCount int    `json:"episode_count"`
+	AirDate      string `json:"air_date"`
+}
+
+type TMDBTVShowItem struct {
+	Name             string             `json:"name"`
+	OriginalName     string             `json:"original_name"`
+	OriginalLanguage string             `json:"original_language"`
+	Overview         string             `json:"overview"`
+	FirstAirDate     string             `json:"first_air_date"`
+	Actors           []TMDBActor        `json:"actors"`
+	Seasons          []TMDBTVShowSeason `json:"seasons"`
+}
+
+type SearchTVShowOutput struct {
+	Results []TMDBTVShowItem `json:"results"`
+}
+
+func (s *TMDB) searchTVShows(input TMDBSearchTVShowInput) (SearchTVShowOutput, error) {
+	c, err := tmdb.Init(s.apiKey)
+	if err != nil {
+		log.Printf("Error initializing TMDB client: %v", err)
+		return SearchTVShowOutput{}, err
+	}
+
+	options := map[string]string{"language": s.language, "include_adult": "true"}
+	searchRes, err := c.GetSearchTVShow(input.Name, options)
+	if err != nil {
+		log.Printf("Error searching tv shows: %v", err)
+		return SearchTVShowOutput{}, err
+	}
+
+	var results []TMDBTVShowItem
+	for _, tvShow := range searchRes.Results {
+		item := TMDBTVShowItem{
+			Name:             tvShow.Name,
+			OriginalName:     tvShow.OriginalName,
+			OriginalLanguage: tvShow.OriginalLanguage,
+			Overview:         tvShow.Overview,
+			FirstAirDate:     tvShow.FirstAirDate,
+		}
+
+		// get seasons
+		options := map[string]string{"language": s.language, "append_to_response": "credits"}
+		details, err := c.GetTVDetails(int(tvShow.ID), options)
+		if err != nil {
+			log.Printf("Error getting tv details: %v", err)
+		} else {
+			for _, season := range details.Seasons {
+				item.Seasons = append(item.Seasons, TMDBTVShowSeason{
+					Name:         season.Name,
+					SeasonNumber: season.SeasonNumber,
+					EpisodeCount: season.EpisodeCount,
+					AirDate:      season.AirDate,
+				})
+			}
+
+			for _, cast := range details.Credits.Cast {
+				if len(item.Actors) >= TMDB_LIMIT_ACTORS_COUNT {
+					break
+				}
+				if cast.KnownForDepartment != "Acting" {
+					continue
+				}
+				item.Actors = append(item.Actors, TMDBActor{
+					Name:         cast.Name,
+					OriginalName: cast.OriginalName,
+				})
+			}
+		}
+
+		results = append(results, item)
+	}
+
+	return SearchTVShowOutput{Results: results}, nil
+}
+
+func (s *TMDB) SearchTVShows(
+	ctx context.Context, req *mcp.CallToolRequest, input TMDBSearchTVShowInput) (
+	*mcp.CallToolResult, SearchTVShowOutput, error) {
+	result, err := s.searchTVShows(input)
 	return nil, result, err
 }
