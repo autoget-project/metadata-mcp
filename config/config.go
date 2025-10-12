@@ -56,3 +56,25 @@ func ReadConfig(path string) (*Config, error) {
 	}
 	return conf, nil
 }
+
+func ReadConfigFromEnv() (*Config, error) {
+	conf := &Config{}
+
+	if portStr := os.Getenv("PORT"); portStr != "" {
+		_, err := fmt.Sscanf(portStr, "%d", &conf.Port)
+		if err != nil {
+			return nil, fmt.Errorf("invalid PORT environment variable: %w", err)
+		}
+	}
+	conf.TMDBAPIKey = os.Getenv("TMDB_API_KEY")
+	conf.TMDBResponseLanguage = os.Getenv("TMDB_RESPONSE_LANGUAGE")
+	conf.ThePornDBAPIToken = os.Getenv("TPDB_API_TOKEN")
+	conf.MetaTubeAPIURL = os.Getenv("METATUBE_API_URL")
+	conf.MetaTubeAPIKEY = os.Getenv("METATUBE_API_KEY")
+
+	err := conf.validate()
+	if err != nil {
+		return nil, err
+	}
+	return conf, nil
+}

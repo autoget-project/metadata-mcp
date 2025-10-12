@@ -20,9 +20,19 @@ func main() {
 	configPath := flag.String("c", "", "path to config file")
 	flag.Parse()
 
-	conf, err := config.ReadConfig(*configPath)
-	if err != nil {
-		log.Fatalf("Error reading config from %s: %v", *configPath, err)
+	var conf *config.Config
+	var err error
+
+	if *configPath == "" {
+		conf, err = config.ReadConfig(*configPath)
+		if err != nil {
+			log.Fatalf("Error reading config from %s: %v", *configPath, err)
+		}
+	} else {
+		conf, err = config.ReadConfigFromEnv()
+		if err != nil {
+			log.Fatalf("Error reading config from environment variables: %v", err)
+		}
 	}
 
 	server := mcp.NewServer(&mcp.Implementation{

@@ -9,9 +9,9 @@ import (
 
 func tpdbTokenFromEnv(t *testing.T) string {
 	t.Helper()
-	token := os.Getenv("THE_PORN_DB_API_TOKEN")
+	token := os.Getenv("TPDB_API_TOKEN")
 	if token == "" {
-		t.Skip("THE_PORN_DB_API_TOKEN environment variable not set")
+		t.Skip("TPDB_API_TOKEN environment variable not set")
 	}
 	return token
 }

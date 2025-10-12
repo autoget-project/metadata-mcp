@@ -50,10 +50,6 @@ type MetatubeSearchJAVResponse struct {
 		Number      string   `json:"number"`
 		Title       string   `json:"title"`
 		Provider    string   `json:"provider"`
-		Homepage    string   `json:"homepage"`
-		ThumbURL    string   `json:"thumb_url"`
-		CoverURL    string   `json:"cover_url"`
-		Score       int      `json:"score"`
 		Actors      []string `json:"actors,omitempty"`
 		ReleaseDate string   `json:"release_date"`
 	} `json:"data"`
