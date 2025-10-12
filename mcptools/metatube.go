@@ -24,8 +24,8 @@ func NewMetatube(apiURL, apiKey string) *Metatube {
 func (s *Metatube) AddTools(server *mcp.Server) {
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "search_japanese_porn",
-		Description: "Search for Japanese pornographic by given JavID (番号).",
-	}, s.searchTJAVTool)
+		Description: "Search for Japanese and Chinese pornographic by given ID (番号).",
+	}, s.searchJAVTool)
 }
 
 type SearchJAVInput struct {
@@ -97,7 +97,7 @@ func (s *Metatube) searchJAV(input SearchJAVInput) (SearchJAVOutput, error) {
 	return SearchJAVOutput{Results: results}, nil
 }
 
-func (s *Metatube) searchTJAVTool(
+func (s *Metatube) searchJAVTool(
 	ctx context.Context, req *mcp.CallToolRequest, input SearchJAVInput) (
 	*mcp.CallToolResult, SearchJAVOutput, error) {
 	result, err := s.searchJAV(input)

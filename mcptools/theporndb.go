@@ -10,9 +10,9 @@ import (
 )
 
 const (
-	LimitVideoPerType  = 10
-	tpdbSearchMovieURL = "https://api.theporndb.net/movies"
-	tpdbSearchSceneURL = "https://api.theporndb.net/scenes"
+	tpdbLimitVideoPerType = 10
+	tpdbSearchMovieURL    = "https://api.theporndb.net/movies"
+	tpdbSearchSceneURL    = "https://api.theporndb.net/scenes"
 )
 
 type ThePornDB struct {
@@ -117,7 +117,7 @@ type searchTPDBVideosResponse struct {
 }
 
 type TPDBSearchVideosInput struct {
-	Query string `json:"query" jsonschema:"the name of the video to search for, don't include release date and studio prefix"`
+	Query string `json:"query" jsonschema:"the name of the video to search for, don't include release date and studio prefix, don't use dash or dot spliter"`
 }
 
 type TPDBVideoItem struct {
@@ -161,7 +161,7 @@ func (s *ThePornDB) search(query string, url_ string) ([]TPDBVideoItem, error) {
 	}
 	var results []TPDBVideoItem
 	for _, item := range res.Data {
-		if len(results) >= LimitVideoPerType {
+		if len(results) >= tpdbLimitVideoPerType {
 			break
 		}
 
