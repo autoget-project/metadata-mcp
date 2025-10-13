@@ -20,7 +20,7 @@ func metatubeURLFromEnv(t *testing.T) string {
 func TestSearchJAV(t *testing.T) {
 	url := metatubeURLFromEnv(t)
 	metatube := NewMetatube(url, "")
-	result, err := metatube.searchJAV(SearchJAVInput{JAVID: "SSIS-698"})
+	result, err := metatube.searchJAV(t.Context(), SearchJAVInput{JAVID: "SSIS-698"})
 	require.NoError(t, err)
 	require.NotEmpty(t, result.Results)
 	assert.Equal(t, "SSIS-698", result.Results[0].JAVID)

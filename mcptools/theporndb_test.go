@@ -19,7 +19,7 @@ func tpdbTokenFromEnv(t *testing.T) string {
 func TestSearchTPDBVideo(t *testing.T) {
 	token := tpdbTokenFromEnv(t)
 	tpdb := NewThePornDB(token)
-	got, err := tpdb.searchTPDBVideos(TPDBSearchVideosInput{Query: "Long Con"})
+	got, err := tpdb.searchTPDBVideos(t.Context(), TPDBSearchVideosInput{Query: "Long Con"})
 	require.NoError(t, err)
 	require.NotEmpty(t, got.Results)
 }

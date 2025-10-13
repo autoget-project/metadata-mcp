@@ -132,7 +132,7 @@ type TPDBSearchVideosOutput struct {
 	Results []TPDBVideoItem `json:"results"`
 }
 
-func (s *ThePornDB) search(query string, url_ string) ([]TPDBVideoItem, error) {
+func (s *ThePornDB) search(ctx context.Context, query string, url_ string) ([]TPDBVideoItem, error) {
 	u, err := url.Parse(url_)
 	if err != nil {
 		return nil, err
@@ -142,7 +142,7 @@ func (s *ThePornDB) search(query string, url_ string) ([]TPDBVideoItem, error) {
 	q.Set("q", query)
 	u.RawQuery = q.Encode()
 
-	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -182,14 +182,14 @@ func (s *ThePornDB) search(query string, url_ string) ([]TPDBVideoItem, error) {
 }
 
 // searchTPDBVideos will search both on scene and movie
-func (s *ThePornDB) searchTPDBVideos(input TPDBSearchVideosInput) (TPDBSearchVideosOutput, error) {
+func (s *ThePornDB) searchTPDBVideos(ctx context.Context, input TPDBSearchVideosInput) (TPDBSearchVideosOutput, error) {
 	// search scene
-	res, err := s.search(input.Query, tpdbSearchSceneURL)
+	res, err := s.search(ctx, input.Query, tpdbSearchSceneURL)
 	if err != nil {
 		return TPDBSearchVideosOutput{}, err
 	}
 	// search movie
-	searchMoviesRes, err := s.search(input.Query, tpdbSearchMovieURL)
+	searchMoviesRes, err := s.search(ctx, input.Query, tpdbSearchMovieURL)
 	if err != nil {
 		return TPDBSearchVideosOutput{}, err
 	}
@@ -199,6 +199,6 @@ func (s *ThePornDB) searchTPDBVideos(input TPDBSearchVideosInput) (TPDBSearchVid
 
 func (s *ThePornDB) searchTPDBVideosTool(ctx context.Context, req *mcp.CallToolRequest, input TPDBSearchVideosInput) (
 	*mcp.CallToolResult, TPDBSearchVideosOutput, error) {
-	result, err := s.searchTPDBVideos(input)
+	result, err := s.searchTPDBVideos(ctx, input)
 	return nil, result, err
 }

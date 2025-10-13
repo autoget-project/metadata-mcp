@@ -55,7 +55,7 @@ type MetatubeSearchJAVResponse struct {
 	} `json:"data"`
 }
 
-func (s *Metatube) searchJAV(input SearchJAVInput) (SearchJAVOutput, error) {
+func (s *Metatube) searchJAV(ctx context.Context, input SearchJAVInput) (SearchJAVOutput, error) {
 	u, err := url.Parse(s.apiURL)
 	if err != nil {
 		return SearchJAVOutput{}, err
@@ -65,7 +65,7 @@ func (s *Metatube) searchJAV(input SearchJAVInput) (SearchJAVOutput, error) {
 		"q": {input.JAVID},
 	}.Encode()
 
-	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u.String(), nil)
 	if err != nil {
 		return SearchJAVOutput{}, err
 	}
@@ -100,6 +100,6 @@ func (s *Metatube) searchJAV(input SearchJAVInput) (SearchJAVOutput, error) {
 func (s *Metatube) searchJAVTool(
 	ctx context.Context, req *mcp.CallToolRequest, input SearchJAVInput) (
 	*mcp.CallToolResult, SearchJAVOutput, error) {
-	result, err := s.searchJAV(input)
+	result, err := s.searchJAV(ctx, input)
 	return nil, result, err
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
-const TMDBLimitActorsCount = 10
+const tmdbLimitActorsCount = 10
 
 type TMDB struct {
 	apiKey   string
@@ -92,7 +92,7 @@ func (s *TMDB) searchMovies(input TMDBSearchMovieInput) (SearchMovieOutput, erro
 			log.Printf("Error getting movie credits: %v", err)
 		} else {
 			for _, cast := range credits.Cast {
-				if len(actors) >= TMDBLimitActorsCount {
+				if len(actors) >= tmdbLimitActorsCount {
 					break
 				}
 				if cast.KnownForDepartment != "Acting" {
@@ -184,7 +184,7 @@ func (s *TMDB) searchTVShows(input TMDBSearchTVShowInput) (SearchTVShowOutput, e
 			}
 
 			for _, cast := range details.Credits.Cast {
-				if len(item.Actors) >= TMDBLimitActorsCount {
+				if len(item.Actors) >= tmdbLimitActorsCount {
 					break
 				}
 				if cast.KnownForDepartment != "Acting" {

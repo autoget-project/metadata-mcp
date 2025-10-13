@@ -39,10 +39,17 @@ func main() {
 		Name: "metadata-mcp-server",
 	}, nil)
 
+	// Add Tools
 	mcptools.NewTMDB(conf.TMDBAPIKey, conf.TMDBResponseLanguage).AddTools(server)
 	mcptools.NewThePornDB(conf.ThePornDBAPIToken).AddTools(server)
 	mcptools.NewMetatube(conf.MetaTubeAPIURL, conf.MetaTubeAPIKEY).AddTools(server)
-	// TODO: Add other MCP tools here (ThePornDB, Metatube, DuckDuckGo)
+	ddg, err := mcptools.NewDuckDuckGo()
+	if err != nil {
+		log.Fatalf("Error creating DuckDuckGo tool: %v", err)
+	}
+	ddg.AddTools(server)
+	fetcher := &mcptools.Fetcher{}
+	fetcher.AddTools(server)
 
 	handler := mcp.NewStreamableHTTPHandler(func(req *http.Request) *mcp.Server {
 		return server
