@@ -28,7 +28,7 @@ func NewDuckDuckGo() (*DuckDuckGo, error) {
 
 func (s *DuckDuckGo) AddTools(server *mcp.Server) {
 	mcp.AddTool(server, &mcp.Tool{
-		Name:        "duckduckgo_search",
+		Name:        "web_search",
 		Description: s.tool.Description(),
 	}, s.SearchDuckDuckGoTool)
 }

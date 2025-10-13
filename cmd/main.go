@@ -50,6 +50,7 @@ func main() {
 	ddg.AddTools(server)
 	fetcher := &mcptools.Fetcher{}
 	fetcher.AddTools(server)
+	mcptools.NewWikipedia(conf.WikipediaLanguage).AddTools(server)
 
 	handler := mcp.NewStreamableHTTPHandler(func(req *http.Request) *mcp.Server {
 		return server
