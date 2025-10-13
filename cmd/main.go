@@ -23,7 +23,7 @@ func main() {
 	var conf *config.Config
 	var err error
 
-	if *configPath == "" {
+	if *configPath != "" {
 		conf, err = config.ReadConfig(*configPath)
 		if err != nil {
 			log.Fatalf("Error reading config from %s: %v", *configPath, err)
@@ -39,7 +39,7 @@ func main() {
 		Name: "metadata-mcp-server",
 	}, nil)
 
-	// Add Tools
+	// ------ Add Tools BEGIN ------
 	mcptools.NewTMDB(conf.TMDBAPIKey, conf.TMDBResponseLanguage).AddTools(server)
 	mcptools.NewThePornDB(conf.ThePornDBAPIToken).AddTools(server)
 	mcptools.NewMetatube(conf.MetaTubeAPIURL, conf.MetaTubeAPIKEY).AddTools(server)
@@ -48,9 +48,12 @@ func main() {
 		log.Fatalf("Error creating DuckDuckGo tool: %v", err)
 	}
 	ddg.AddTools(server)
-	fetcher := &mcptools.Fetcher{}
-	fetcher.AddTools(server)
+	mcptools.NewFetcher().AddTools(server)
 	mcptools.NewWikipedia(conf.WikipediaLanguage).AddTools(server)
+	mcptools.NewJAVActorAlias().AddTools(server)
+	// ------ Add Tools END ------
+
+	// Create HTTP handler
 
 	handler := mcp.NewStreamableHTTPHandler(func(req *http.Request) *mcp.Server {
 		return server

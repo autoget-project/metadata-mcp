@@ -13,6 +13,10 @@ import (
 type Fetcher struct {
 }
 
+func NewFetcher() *Fetcher {
+	return &Fetcher{}
+}
+
 func (f *Fetcher) AddTools(server *mcp.Server) {
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "fetch",
