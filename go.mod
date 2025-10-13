@@ -5,7 +5,7 @@ go 1.25.1
 require (
 	github.com/cyruzin/golang-tmdb v1.8.2
 	github.com/modelcontextprotocol/go-sdk v1.0.0
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.1
 	go.yaml.in/yaml/v4 v4.0.0-rc.2
 )
 
