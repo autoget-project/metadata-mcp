@@ -29,7 +29,7 @@ func NewDuckDuckGo() (*DuckDuckGo, error) {
 func (s *DuckDuckGo) AddTools(server *mcp.Server) {
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "web_search",
-		Description: s.tool.Description(),
+		Description: "Performs a web search using DuckDuckGo and returns the search results.",
 	}, s.SearchDuckDuckGoTool)
 }
 

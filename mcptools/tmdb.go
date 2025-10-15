@@ -26,11 +26,11 @@ func NewTMDB(apiKey, language string) *TMDB {
 func (s *TMDB) AddTools(server *mcp.Server) {
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "search_movies",
-		Description: "Search for movies on TMDB by given name (required) and year (optional).",
+		Description: "Searches for movies on The Movie Database (TMDB) by name (required) and optional release year.",
 	}, s.searchMoviesTool)
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "search_tv_shows",
-		Description: "Search for tv shows on TMDB by given name.",
+		Description: "Searches for TV shows on The Movie Database (TMDB) by name.",
 	}, s.searchTVShowsTool)
 }
 

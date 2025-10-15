@@ -28,7 +28,7 @@ func NewThePornDB(apiToken string) *ThePornDB {
 func (s *ThePornDB) AddTools(server *mcp.Server) {
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "search_porn",
-		Description: "Search Non-Japanese Porns",
+		Description: "Searches for non-Japanese pornographic movies and scenes on ThePornDB.",
 	}, s.searchTPDBVideosTool)
 }
 

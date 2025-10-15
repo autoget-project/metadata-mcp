@@ -24,7 +24,7 @@ func NewMetatube(apiURL, apiKey string) *Metatube {
 func (s *Metatube) AddTools(server *mcp.Server) {
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "search_japanese_porn",
-		Description: "Search for Japanese and Chinese pornographic by given ID (番号).",
+		Description: "Searches for Japanese and Chinese pornographic content on Metatube using a given ID (番号), e.g., 'SSIS-698'.",
 	}, s.searchJAVTool)
 }
 

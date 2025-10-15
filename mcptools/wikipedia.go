@@ -20,11 +20,11 @@ func NewWikipedia(language string) *Wikipedia {
 func (w *Wikipedia) AddTools(server *mcp.Server) {
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "wikipedia_search",
-		Description: "Search for Wikipedia pages by given query.",
+		Description: "Searches Wikipedia for pages matching a given query and returns a summary of each result.",
 	}, w.searchWikipediaTool)
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "wikipedia_page",
-		Description: "Get the content of a Wikipedia page by given title.",
+		Description: "Retrieves the full content of a Wikipedia page given its exact title.",
 	}, w.wikipediaPageTool)
 }
 

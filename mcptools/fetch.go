@@ -20,7 +20,7 @@ func NewFetcher() *Fetcher {
 func (f *Fetcher) AddTools(server *mcp.Server) {
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "fetch",
-		Description: "fetch content from given url",
+		Description: "Fetches content from a specified URL. Can optionally convert HTML content to Markdown.",
 	}, f.fetchTool)
 }
 
