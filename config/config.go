@@ -15,6 +15,7 @@ type Config struct {
 	MetaTubeAPIURL       string `yaml:"metatube_api_url"`
 	MetaTubeAPIKEY       string `yaml:"metatube_api_key"`
 	WikipediaLanguage    string `yaml:"wikipedia_language"`
+	JAVActorJSONFilepath string `yaml:"jav_actor_json_filepath"`
 }
 
 func (c *Config) validate() error {
@@ -42,6 +43,9 @@ func (c *Config) validate() error {
 	if c.WikipediaLanguage == "" {
 		// default language is zh
 		c.WikipediaLanguage = "zh"
+	}
+	if c.JAVActorJSONFilepath == "" {
+		return fmt.Errorf("JAV_ACTOR_JSON_FILEPATH is required")
 	}
 	return nil
 }
@@ -78,6 +82,7 @@ func ReadConfigFromEnv() (*Config, error) {
 	conf.MetaTubeAPIURL = os.Getenv("METATUBE_API_URL")
 	conf.MetaTubeAPIKEY = os.Getenv("METATUBE_API_KEY")
 	conf.WikipediaLanguage = os.Getenv("WIKIPEDIA_LANGUAGE")
+	conf.JAVActorJSONFilepath = os.Getenv("JAV_ACTOR_JSON_FILEPATH")
 
 	err := conf.validate()
 	if err != nil {
