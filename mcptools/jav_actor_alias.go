@@ -10,6 +10,7 @@ import (
 	"os"
 	"slices"
 	"strings"
+	"sync"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
@@ -17,6 +18,7 @@ import (
 
 type JAVActorAlias struct {
 	jsonFile string
+	mu       sync.Mutex
 }
 
 func NewJAVActorAlias(jsonFile string) *JAVActorAlias {
@@ -169,6 +171,8 @@ type AddAliasOutput struct {
 }
 
 func (s *JAVActorAlias) addAlias(input AddAliasInput) (AddAliasOutput, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	dirToAlias, aliasToDir, err := s.loadJSONFile()
 	if err != nil {
 		return AddAliasOutput{}, err
