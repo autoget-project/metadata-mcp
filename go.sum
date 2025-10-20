@@ -15,8 +15,8 @@ github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWR
 github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5PlCu98SY8svDHJxuZscDgtXS6KTTbou5AhLI=
 github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1/go.mod h1:Q3SI9o4m/ZMnBNeIyt5eFwwo7qiLfzFZmjNmxjkiQlU=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
-github.com/cyruzin/golang-tmdb v1.8.2 h1:Sr96kuNc3MirbaOwYk6DHEzF0lGFJqPTQBjbanlX6tk=
-github.com/cyruzin/golang-tmdb v1.8.2/go.mod h1:Yx4f4KyLgWAnvwgZ729nJPOTKkD4epYoK+cGDZ3AFzs=
+github.com/cyruzin/golang-tmdb v1.9.0 h1:l6vaODW8Bgm2AWNLuXpaWu6/1cHe+WsdUy/soNJWYM4=
+github.com/cyruzin/golang-tmdb v1.9.0/go.mod h1:Yx4f4KyLgWAnvwgZ729nJPOTKkD4epYoK+cGDZ3AFzs=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
