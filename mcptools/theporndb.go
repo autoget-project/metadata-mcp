@@ -126,7 +126,7 @@ type TPDBVideoItem struct {
 	Description string   `json:"description"`
 	Type        string   `json:"type" jsonschema:"scene or movie"`
 	Date        string   `json:"date"`
-	Actors      []string `json:"actors"`
+	Actors      []string `json:"actors,omitempty"`
 }
 type TPDBSearchVideosOutput struct {
 	Results []TPDBVideoItem `json:"results"`

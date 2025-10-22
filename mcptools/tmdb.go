@@ -50,7 +50,7 @@ type TMDBMovieItem struct {
 	OriginalLanguage string      `json:"original_language"`
 	Overview         string      `json:"overview"`
 	ReleaseDate      string      `json:"release_date"`
-	Actors           []TMDBActor `json:"actors"`
+	Actors           []TMDBActor `json:"actors,omitempty"`
 }
 
 type SearchMovieOutput struct {
@@ -136,8 +136,8 @@ type TMDBTVShowItem struct {
 	OriginalLanguage string             `json:"original_language"`
 	Overview         string             `json:"overview"`
 	FirstAirDate     string             `json:"first_air_date"`
-	Actors           []TMDBActor        `json:"actors"`
-	Seasons          []TMDBTVShowSeason `json:"seasons"`
+	Actors           []TMDBActor        `json:"actors,omitempty"`
+	Seasons          []TMDBTVShowSeason `json:"seasons,omitempty"`
 }
 
 type SearchTVShowOutput struct {

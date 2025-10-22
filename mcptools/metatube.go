@@ -36,7 +36,7 @@ type JAV struct {
 	JAVID       string   `json:"jav_id"`
 	Title       string   `json:"title"`
 	Provider    string   `json:"provider"`
-	Actors      []string `json:"actors"`
+	Actors      []string `json:"actors,omitempty"`
 	ReleaseDate string   `json:"release_date"`
 }
 
