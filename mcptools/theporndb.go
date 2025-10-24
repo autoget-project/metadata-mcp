@@ -127,6 +127,7 @@ type TPDBVideoItem struct {
 	Type        string   `json:"type" jsonschema:"scene or movie"`
 	Date        string   `json:"date"`
 	Actors      []string `json:"actors,omitempty"`
+	Tags        []string `json:"tags,omitempty"`
 }
 type TPDBSearchVideosOutput struct {
 	Results []TPDBVideoItem `json:"results"`
@@ -169,6 +170,10 @@ func (s *ThePornDB) search(ctx context.Context, query string, url_ string) ([]TP
 		for _, actor := range item.Performers {
 			actors = append(actors, actor.Name)
 		}
+		var tags []string
+		for _, tag := range item.Tags {
+			tags = append(tags, tag.Name)
+		}
 		results = append(results, TPDBVideoItem{
 			ID:          item.Slug,
 			Title:       item.Title,
@@ -176,6 +181,7 @@ func (s *ThePornDB) search(ctx context.Context, query string, url_ string) ([]TP
 			Type:        item.Type,
 			Date:        item.Date,
 			Actors:      actors,
+			Tags:        tags,
 		})
 	}
 	return results, nil
