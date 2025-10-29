@@ -44,5 +44,6 @@ The Metadata MCP Server exposes the following tools:
 *   **search_porn**: Searches for non-Japanese pornographic movies and scenes on ThePornDB.
 *   **search_movies**: Searches for movies on The Movie Database (TMDB) by name (required) and optional release year.
 *   **search_tv_shows**: Searches for TV shows on The Movie Database (TMDB) by name.
+*   **find_by_imdb_id**: Finds content on TMDB by IMDB ID using external source lookup. Returns movies, TV shows, or person details based on the IMDB ID.
 *   **wikipedia_search**: Searches Wikipedia for pages matching a given query and returns a summary of each result.
 *   **wikipedia_page**: Retrieves the full content of a Wikipedia page given its exact title.
