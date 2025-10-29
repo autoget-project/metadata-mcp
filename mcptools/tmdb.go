@@ -123,6 +123,48 @@ func (s *TMDB) searchMoviesTool(
 	return nil, result, err
 }
 
+func (s *TMDB) getTVDetails(c *tmdb.Client, tvShowID int) (TMDBTVShowItem, error) {
+	detailOptions := map[string]string{"language": s.language, "append_to_response": "credits"}
+	details, err := c.GetTVDetails(tvShowID, detailOptions)
+	if err != nil {
+		return TMDBTVShowItem{}, err
+	}
+
+	tvItem := TMDBTVShowItem{
+		Name:             details.Name,
+		OriginalName:     details.OriginalName,
+		OriginalLanguage: details.OriginalLanguage,
+		Overview:         details.Overview,
+		FirstAirDate:     details.FirstAirDate,
+	}
+
+	// get seasons
+	for _, season := range details.Seasons {
+		tvItem.Seasons = append(tvItem.Seasons, TMDBTVShowSeason{
+			Name:         season.Name,
+			SeasonNumber: season.SeasonNumber,
+			EpisodeCount: season.EpisodeCount,
+			AirDate:      season.AirDate,
+		})
+	}
+
+	// get actors
+	for _, cast := range details.Credits.Cast {
+		if len(tvItem.Actors) >= tmdbLimitActorsCount {
+			break
+		}
+		if cast.KnownForDepartment != "Acting" {
+			continue
+		}
+		tvItem.Actors = append(tvItem.Actors, TMDBActor{
+			Name:         cast.Name,
+			OriginalName: cast.OriginalName,
+		})
+	}
+
+	return tvItem, nil
+}
+
 type TMDBSearchTVShowInput struct {
 	Name string `json:"name" jsonschema:"the name of the movie or tv show to search for"`
 }
@@ -164,44 +206,19 @@ func (s *TMDB) searchTVShows(input TMDBSearchTVShowInput) (SearchTVShowOutput, e
 
 	var results []TMDBTVShowItem
 	for _, tvShow := range searchRes.Results {
-		item := TMDBTVShowItem{
-			Name:             tvShow.Name,
-			OriginalName:     tvShow.OriginalName,
-			OriginalLanguage: tvShow.OriginalLanguage,
-			Overview:         tvShow.Overview,
-			FirstAirDate:     tvShow.FirstAirDate,
-		}
-
-		// get seasons
-		options := map[string]string{"language": s.language, "append_to_response": "credits"}
-		details, err := c.GetTVDetails(int(tvShow.ID), options)
+		tvItem, err := s.getTVDetails(c, int(tvShow.ID))
 		if err != nil {
 			log.Printf("Error getting tv details: %v", err)
-		} else {
-			for _, season := range details.Seasons {
-				item.Seasons = append(item.Seasons, TMDBTVShowSeason{
-					Name:         season.Name,
-					SeasonNumber: season.SeasonNumber,
-					EpisodeCount: season.EpisodeCount,
-					AirDate:      season.AirDate,
-				})
-			}
-
-			for _, cast := range details.Credits.Cast {
-				if len(item.Actors) >= tmdbLimitActorsCount {
-					break
-				}
-				if cast.KnownForDepartment != "Acting" {
-					continue
-				}
-				item.Actors = append(item.Actors, TMDBActor{
-					Name:         cast.Name,
-					OriginalName: cast.OriginalName,
-				})
+			// Use basic info from search results
+			tvItem = TMDBTVShowItem{
+				Name:             tvShow.Name,
+				OriginalName:     tvShow.OriginalName,
+				OriginalLanguage: tvShow.OriginalLanguage,
+				Overview:         tvShow.Overview,
+				FirstAirDate:     tvShow.FirstAirDate,
 			}
 		}
-
-		results = append(results, item)
+		results = append(results, tvItem)
 	}
 
 	return SearchTVShowOutput{Results: results}, nil
@@ -228,9 +245,9 @@ type TMDBPerson struct {
 }
 
 type TMDBFindByIMDBOutput struct {
-	MovieResults    []TMDBMovieItem `json:"movie_results,omitempty"`
-	TVResults       []TMDBTVShowItem `json:"tv_results,omitempty"`
-	PersonResults   []TMDBPerson     `json:"person_results,omitempty"`
+	MovieResults  []TMDBMovieItem  `json:"movie_results,omitempty"`
+	TVResults     []TMDBTVShowItem `json:"tv_results,omitempty"`
+	PersonResults []TMDBPerson     `json:"person_results,omitempty"`
 }
 
 func (s *TMDB) findByIMDB(input TMDBFindByIMDBInput) (TMDBFindByIMDBOutput, error) {
@@ -289,126 +306,30 @@ func (s *TMDB) findByIMDB(input TMDBFindByIMDBInput) (TMDBFindByIMDBOutput, erro
 
 	// Handle TV results
 	for _, tvShow := range findResult.TvResults {
-		detailOptions := map[string]string{"language": s.language, "append_to_response": "credits"}
-		details, err := c.GetTVDetails(int(tvShow.ID), detailOptions)
+		tvItem, err := s.getTVDetails(c, int(tvShow.ID))
 		if err != nil {
 			log.Printf("Error getting tv details: %v", err)
 			continue
-		}
-
-		tvItem := TMDBTVShowItem{
-			Name:             details.Name,
-			OriginalName:     details.OriginalName,
-			OriginalLanguage: details.OriginalLanguage,
-			Overview:         details.Overview,
-			FirstAirDate:     details.FirstAirDate,
-		}
-
-		// get seasons
-		for _, season := range details.Seasons {
-			tvItem.Seasons = append(tvItem.Seasons, TMDBTVShowSeason{
-				Name:         season.Name,
-				SeasonNumber: season.SeasonNumber,
-				EpisodeCount: season.EpisodeCount,
-				AirDate:      season.AirDate,
-			})
-		}
-
-		for _, cast := range details.Credits.Cast {
-			if len(tvItem.Actors) >= tmdbLimitActorsCount {
-				break
-			}
-			if cast.KnownForDepartment != "Acting" {
-				continue
-			}
-			tvItem.Actors = append(tvItem.Actors, TMDBActor{
-				Name:         cast.Name,
-				OriginalName: cast.OriginalName,
-			})
 		}
 		result.TVResults = append(result.TVResults, tvItem)
 	}
 
 	// Handle TV episode results (find the TV series)
 	for _, episode := range findResult.TvEpisodeResults {
-		detailOptions := map[string]string{"language": s.language, "append_to_response": "credits"}
-		details, err := c.GetTVDetails(int(episode.ShowID), detailOptions)
+		tvItem, err := s.getTVDetails(c, int(episode.ShowID))
 		if err != nil {
 			log.Printf("Error getting tv series details for episode: %v", err)
 			continue
-		}
-
-		tvItem := TMDBTVShowItem{
-			Name:             details.Name,
-			OriginalName:     details.OriginalName,
-			OriginalLanguage: details.OriginalLanguage,
-			Overview:         details.Overview,
-			FirstAirDate:     details.FirstAirDate,
-		}
-
-		// get seasons
-		for _, season := range details.Seasons {
-			tvItem.Seasons = append(tvItem.Seasons, TMDBTVShowSeason{
-				Name:         season.Name,
-				SeasonNumber: season.SeasonNumber,
-				EpisodeCount: season.EpisodeCount,
-				AirDate:      season.AirDate,
-			})
-		}
-
-		for _, cast := range details.Credits.Cast {
-			if len(tvItem.Actors) >= tmdbLimitActorsCount {
-				break
-			}
-			if cast.KnownForDepartment != "Acting" {
-				continue
-			}
-			tvItem.Actors = append(tvItem.Actors, TMDBActor{
-				Name:         cast.Name,
-				OriginalName: cast.OriginalName,
-			})
 		}
 		result.TVResults = append(result.TVResults, tvItem)
 	}
 
 	// Handle TV season results (find the TV series)
 	for _, season := range findResult.TvSeasonResults {
-		detailOptions := map[string]string{"language": s.language, "append_to_response": "credits"}
-		details, err := c.GetTVDetails(int(season.ShowID), detailOptions)
+		tvItem, err := s.getTVDetails(c, int(season.ShowID))
 		if err != nil {
 			log.Printf("Error getting tv series details for season: %v", err)
 			continue
-		}
-
-		tvItem := TMDBTVShowItem{
-			Name:             details.Name,
-			OriginalName:     details.OriginalName,
-			OriginalLanguage: details.OriginalLanguage,
-			Overview:         details.Overview,
-			FirstAirDate:     details.FirstAirDate,
-		}
-
-		// get seasons
-		for _, s := range details.Seasons {
-			tvItem.Seasons = append(tvItem.Seasons, TMDBTVShowSeason{
-				Name:         s.Name,
-				SeasonNumber: s.SeasonNumber,
-				EpisodeCount: s.EpisodeCount,
-				AirDate:      s.AirDate,
-			})
-		}
-
-		for _, cast := range details.Credits.Cast {
-			if len(tvItem.Actors) >= tmdbLimitActorsCount {
-				break
-			}
-			if cast.KnownForDepartment != "Acting" {
-				continue
-			}
-			tvItem.Actors = append(tvItem.Actors, TMDBActor{
-				Name:         cast.Name,
-				OriginalName: cast.OriginalName,
-			})
 		}
 		result.TVResults = append(result.TVResults, tvItem)
 	}
