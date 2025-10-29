@@ -50,7 +50,6 @@ func main() {
 	ddg.AddTools(server)
 	mcptools.NewFetcher().AddTools(server)
 	mcptools.NewWikipedia(conf.WikipediaLanguage).AddTools(server)
-	mcptools.NewJAVActorAlias(conf.JAVActorJSONFilepath).AddTools(server)
 	// ------ Add Tools END ------
 
 	// Create HTTP handler
