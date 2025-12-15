@@ -8,8 +8,8 @@ github.com/anaskhan96/soup v1.2.5 h1:V/FHiusdTrPrdF4iA1YkVxsOpdNcgvqT1hG+YtcZ5hM
 github.com/anaskhan96/soup v1.2.5/go.mod h1:6YnEp9A2yywlYdM4EgDz9NEHclocMepEtku7wg6Cq3s=
 github.com/andybalholm/cascadia v1.3.3 h1:AG2YHrzJIm4BZ19iwJ/DAua6Btl3IwJX+VI4kktS1LM=
 github.com/andybalholm/cascadia v1.3.3/go.mod h1:xNd9bqTn98Ln4DwST8/nG+H0yuB8Hmgu1YHNnWw0GeA=
-github.com/cyruzin/golang-tmdb v1.9.0 h1:l6vaODW8Bgm2AWNLuXpaWu6/1cHe+WsdUy/soNJWYM4=
-github.com/cyruzin/golang-tmdb v1.9.0/go.mod h1:Yx4f4KyLgWAnvwgZ729nJPOTKkD4epYoK+cGDZ3AFzs=
+github.com/cyruzin/golang-tmdb v1.9.2 h1:8G9w16PgzYNkmkbT0Sdu/Asx+yeQ93rbp3kQUxBu+AE=
+github.com/cyruzin/golang-tmdb v1.9.2/go.mod h1:Yx4f4KyLgWAnvwgZ729nJPOTKkD4epYoK+cGDZ3AFzs=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc h1:U9qPSI2PIWSS1VwoXQT9A3Wy9MM3WgvqSxFWenqJduM=
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
