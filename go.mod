@@ -4,7 +4,7 @@ go 1.25.1
 
 require (
 	github.com/JohannesKaufmann/html-to-markdown/v2 v2.4.0
-	github.com/cyruzin/golang-tmdb v1.9.0
+	github.com/cyruzin/golang-tmdb v1.9.2
 	github.com/modelcontextprotocol/go-sdk v1.0.0
 	github.com/stretchr/testify v1.11.1
 	github.com/tmc/langchaingo v0.1.14
