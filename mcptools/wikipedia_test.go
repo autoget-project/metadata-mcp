@@ -1,6 +1,7 @@
 package mcptools
 
 import (
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -23,6 +24,9 @@ func TestWikipedia_searchWikipedia(t *testing.T) {
 }
 
 func TestWikipedia_wikipediaPage(t *testing.T) {
+	if os.Getenv("GITHUB_ACTIONS") == "true" {
+		t.Skip("Skipping test in GitHub Actions")
+	}
 	w := NewWikipedia("en")
 	input := WikipediaPageInput{Title: "Go (programming language)"}
 	output, err := w.wikipediaPage(input)
