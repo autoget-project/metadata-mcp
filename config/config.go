@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"go.yaml.in/yaml/v4"
+	"github.com/goccy/go-yaml"
 )
 
 type Config struct {

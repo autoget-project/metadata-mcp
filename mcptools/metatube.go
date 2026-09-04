@@ -96,7 +96,7 @@ func (s *Metatube) searchJAV(ctx context.Context, input SearchJAVInput) (SearchJ
 	if err != nil {
 		return SearchJAVOutput{}, err
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	res := MetatubeJAVSearchResponse{}
 	err = json.NewDecoder(resp.Body).Decode(&res)
@@ -133,7 +133,7 @@ func (s *Metatube) searchJAV(ctx context.Context, input SearchJAVInput) (SearchJ
 			if err != nil {
 				return SearchJAVOutput{}, err
 			}
-			defer resp.Body.Close()
+			defer func() { _ = resp.Body.Close() }()
 
 			detailsRes := MetatubeJAVDetaiisResponse{}
 			err = json.NewDecoder(resp.Body).Decode(&detailsRes)

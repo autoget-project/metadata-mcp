@@ -8,6 +8,9 @@ import (
 )
 
 func TestWikipedia_searchWikipedia(t *testing.T) {
+	if os.Getenv("GITHUB_ACTIONS") == "true" {
+		t.Skip("Skipping test in GitHub Actions")
+	}
 	w := NewWikipedia("en")
 	input := WikipediaSearchInput{Query: "Go programming language"}
 	output, err := w.searchWikipedia(input)

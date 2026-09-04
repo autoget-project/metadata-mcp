@@ -153,7 +153,7 @@ func (s *ThePornDB) search(ctx context.Context, query string, url_ string) ([]TP
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	res := searchTPDBVideosResponse{}
 	err = json.NewDecoder(resp.Body).Decode(&res)

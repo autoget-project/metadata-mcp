@@ -11,9 +11,10 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+
 	"github.com/autoget-project/metadata-mcp/config"
 	"github.com/autoget-project/metadata-mcp/mcptools"
-	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
 func main() {
