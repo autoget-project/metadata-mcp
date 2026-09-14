@@ -1,5 +1,9 @@
 # Metadata MCP Server
 
+> [!WARNING]
+>
+> This repo is deprecated, the project is moved to https://github.com/autoget-project/autoget/tree/main/organizer/internal/metadata
+
 A metadata server that searches for metadata from various sources, including TMDB, ThePornDB, and Metatube.
 
 ## Features
